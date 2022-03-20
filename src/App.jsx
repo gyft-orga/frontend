@@ -1,11 +1,14 @@
-import React, { Component} from "react";
+import React, { Component } from "react";
+import { Outlet } from "react-router-dom";
 import "./App.css";
+import { Nav } from "./Nav.jsx";
 
-class App extends Component{
+class App extends Component {
   render(){
-    return(
-      <div className="App">
-        <h1>Hello World, App!</h1>
+    return (
+      <div>
+        <Nav/>
+        <Outlet/>
       </div>
     );
   }

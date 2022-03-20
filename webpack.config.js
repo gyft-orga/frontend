@@ -21,11 +21,12 @@ module.exports = {
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
     path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
-    filename: "bundle.js"
+    publicPath: "/",
+    filename: "dist/bundle.js"
   },
   devServer: {
     port: 3000,
+    historyApiFallback: true, // cf: https://dev.to/tylermcginnis/fixing-the-cannot-get-url-error-on-refresh-with-react-router-or-how-client-side-routers-work-4ho9
     static: [
       {
         directory: path.join(__dirname, 'public'),
