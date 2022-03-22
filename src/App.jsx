@@ -3,11 +3,22 @@ import { useForm } from "react-hook-form";
 import { Outlet } from "react-router-dom";
 import "./App.css";
 import { Nav } from "./Nav.jsx";
+import Axios from "axios";
 
 
 function App() {
   const { register, handleSubmit } = useForm();
   const [data, setData] = useState("");
+
+  Axios({
+    method: "GET",
+    url: "http://localhost:8002/connect",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => {
+    console.log("we are in client", res.data.message);
+  });
   
   return (
     <div>
