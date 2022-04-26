@@ -14,8 +14,7 @@ export function Home() {
                 "Content-Type": "application/json"
             }
         }).then(res => {
-            console.log("user name:", res.data);
-            setUser(res.data)
+            setUser(res.data.username)
         })
             .catch(err => {
                 console.log("err: ", err.response.status)
@@ -31,7 +30,6 @@ export function Home() {
             "Content-Type": "application/json"
           }
         }).then(res => {
-          console.log("response from secret endpoint from backend:", res);
           setUser(null)
           navigate("../home", { replace: true });       
 

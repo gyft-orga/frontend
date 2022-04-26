@@ -18,7 +18,7 @@ export function Register() {
       )
       .then(response => {
         if (response.status === 200) {
-          navigate("../login", { replace: true });
+          navigate("../secret", { replace: true });
         }
       })
       .catch(error => {

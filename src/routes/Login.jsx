@@ -13,7 +13,7 @@ export function Login() {
      .post(
          'http://localhost:8002/auth/login',
          data,
-        { credentials: 'include'},
+        // { credentials: 'include'},
          { headers: { 'Content-Type': 'application/json' }}
       )
      .then(response => {
