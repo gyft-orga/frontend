@@ -11,14 +11,16 @@ export function Login() {
   const onSubmit = data => {
     axios
      .post(
-         'http://localhost:8002/auth/login',
-         data,
-        // { credentials: 'include'},
-         { headers: { 'Content-Type': 'application/json' }}
+        'http://localhost:8002/auth/login',
+        data,
+        {
+          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' },
+        }
       )
      .then(response => {
-      navigate("../home", { replace: true });       
-      })
+        navigate("../home", { replace: true });
+      } )
      .catch(error => {console.log("login error? ", error)});
  };
 
