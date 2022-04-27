@@ -7,7 +7,7 @@ import { Login, Register, Secret, Home } from "./routes";
 render(
   <BrowserRouter>
     <Routes>
-      <Route exact path="/" element={<App />} >
+      <Route exact path="/" element={<App />}>
         <Route path="home" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
@@ -15,6 +15,6 @@ render(
       </Route>
       <Route path="*" element={<main>404</main>} />
     </Routes>
-  </BrowserRouter>
-  , document.querySelector( "#root" )
+  </BrowserRouter>,
+  document.querySelector( "#root" )
 );

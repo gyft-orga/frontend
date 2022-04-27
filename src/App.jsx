@@ -5,11 +5,10 @@ import { Outlet } from "react-router-dom";
 import { Nav } from "./Nav.jsx";
 import Axios from "axios";
 
-
 function App() {
   const { register, handleSubmit } = useForm();
-  const [data, setData] = useState("");
-  
+  const [ data, setData ] = useState( "" );
+
   return (
     <div>
       <Nav />
