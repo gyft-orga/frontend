@@ -7,12 +7,12 @@ import { Login, Register, Secret, Home } from "./routes";
 render(
   <BrowserRouter>
     <Routes>
-      <Route exact path="/" element={<App />}>
-        <Route path="home" element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="secret" element={<Secret />} />
-      </Route>
+    <Route exact path="login" element={<Login />} />
+    <Route exact path="home" element={<Home />} />
+        <Route exact path="login" element={<Login />} />
+        <Route exact path="register" element={<Register />} />
+        <Route exact path="secret" element={<Secret />} />
+      <Route exact path="/" element={<App />} />  
       <Route path="*" element={<main>404</main>} />
     </Routes>
   </BrowserRouter>,
