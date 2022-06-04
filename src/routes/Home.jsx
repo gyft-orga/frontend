@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {GiHamburgerMenu} from 'react-icons/gi'
-// import {Zap} from  '@styled-icons/bootstrap/PatchQuestionFill'
-// import {Zap} from '@styled-icons/octicons'
-import {PatchQuestionFill} from '@styled-icons/bootstrap/PatchQuestionFill'
+import { GiHamburgerMenu } from 'react-icons/gi'
+import { PatchQuestionFill } from '@styled-icons/bootstrap/PatchQuestionFill'
 
 export function Home() {
   let navigate = useNavigate();
   const [user, setUser] = useState(null)
   const [flag, setFlag] = useState("username")
+  const [giftData, setGiftData] = useState(null)
 
   useEffect(() => {
     Axios({
@@ -28,18 +27,33 @@ export function Home() {
       })
   }, [])
 
-  const logout = () => {
+  useEffect(() => {
     Axios({
       method: "GET",
-      url: "http://localhost:8002/auth/logout",
+      url: "http://localhost:8002/home",
       headers: {
         "Content-Type": "application/json"
       }
     }).then(res => {
-      setUser(null)
-      navigate("../home", { replace: true });
-    });
-  }
+      setGiftData(res.data)
+    })
+      .catch(err => {
+        console.log("err: ", err.response)
+      })
+  }, [])
+
+  // const logout = () => {
+  //   Axios({
+  //     method: "GET",
+  //     url: "http://localhost:8002/auth/logout",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   }).then(res => {
+  //     setUser(null)
+  //     navigate("../home", { replace: true });
+  //   });
+  // }
 
   const changeMode = () => {
     setFlag(flag === "phone" ? "username" : "phone")
@@ -63,8 +77,6 @@ export function Home() {
   width: 100%;
   display: flex;
   margin: 0;
-
-  
   `
 
   const QuestionIcon = styled(PatchQuestionFill)`
@@ -87,7 +99,6 @@ export function Home() {
     font-style: italic;
     color: purple;
   `
-
 
   const Text = styled.p`
   font-size: 14px;
@@ -118,9 +129,6 @@ export function Home() {
     <main>
       <Header>
         <GiHamburgerMenu />
-        
- 
-
         {!user ? <p onClick={() => navigate("../login", { replace: true })}>Sign in</p> : <>{user}</>}
       </Header>
       <MainWrapper>
@@ -131,22 +139,40 @@ export function Home() {
         </div>
         {!user && <p>Sign in to see your gift claim history,
           update your gift preferences and more!</p>}
+        <GiftTextTitle>Gifts claimed for you</GiftTextTitle>
+
+        {user && giftData && giftData.filter(gift => gift.owner === user).map((gift, i) => {
+          return (
+            <>
+              <SmallText>{gift.title}</SmallText>
+              <Text>{gift.description}</Text>
+              <FlexWrapper>
+                <InputButton value="Received" />
+                <InputButton value="Not Received" />
+              </FlexWrapper>
+            </>
+          )
+        })}
+        <GiftTextTitle>Gifts you've claimed</GiftTextTitle>
+
+        {user && giftData && giftData.filter(gift => gift.claimed_by === user).map((gift, i) => {
+          return (
+            <>
+              <SmallText>{gift.title}</SmallText>
+              <Text>{gift.description}</Text>
+              <FlexWrapper>
+                <InputButton value="Received" />
+                <InputButton value="Not Received" />
+              </FlexWrapper>
+            </>
+          )
+        })}
         {user && <>
-          <GiftTextTitle>Gifts you've claimed</GiftTextTitle>
-          <Text>A Unicorn</Text>
-          <GiftTextTitle>Gifts you've claimed</GiftTextTitle>
-          <Text>New lens for my camera canon 55mm</Text>
-          <GiftTextTitle>Gifts claimed for you</GiftTextTitle>
-          <Text>A ticket for the BVG</Text>
           <FlexWrapper>
-            <InputButton value="Received" />
-            <InputButton value="Not Received" />
-          </FlexWrapper>
-          <FlexWrapper>
-          <QuestionIcon />
-          <Text>If, after 30 days, a claimed gift is not received, it can be
-            marked as unfulfilled. After 2 unfulfilled gifts, one may get
-            a suspension.</Text>
+            <QuestionIcon />
+            <Text>If, after 30 days, a claimed gift is not received, it can be
+              marked as unfulfilled. After 2 unfulfilled gifts, one may get
+              a suspension.</Text>
           </FlexWrapper>
         </>}
       </MainWrapper>
