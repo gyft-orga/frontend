@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Axios from "axios";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const fileToDataUri = ( file ) => new Promise( ( resolve, reject ) => {
   const reader = new FileReader();
@@ -17,6 +18,7 @@ export function CreateGift() {
   const [ imageURL, setImageURL ] = useState( null );
   const [ dataUri, setDataUri ] = useState( "" );
   const [ user, setUser ] = useState( null );
+  const navigate = useNavigate();
 
   useEffect( () => {
     Axios( {
@@ -34,18 +36,17 @@ export function CreateGift() {
   }, [] );
 
   const onSubmit = ( data ) => {
-    console.log( "user", user );
-    // console.log("data: ", data)
-    // console.log("image url onsubmit: ", imageURL)
-    // console.log("type image url onsubmit: ", typeof imageURL)
-
     axios
       .post( "http://localhost:8002/createGift", { data, imageURL, user }, {
         headers: { "Content-Type": "application/json" },
       } )
       .then( ( response ) => {
-        if ( response.status === 200 )
-          console.log( "success" );
+        console.log( "response", response );
+        console.log( "response status", response.status );
+        if ( response.status === 200 ) {
+          console.log( "this should happen" );
+          navigate( "../myGifts", { replace: true } );
+        }
       } )
       .catch( ( err ) => {
         console.log( err.data );
