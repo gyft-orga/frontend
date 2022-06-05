@@ -5,14 +5,14 @@ import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function App() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm();
   const [ data, setData ] = useState( "" );
 
-  useEffect(() => {
-    navigate("../home", { replace: true });
-  }, [])
+  useEffect( () => {
+    navigate( "../home", { replace: true } );
+  }, [] );
 
   return (
     <div>
