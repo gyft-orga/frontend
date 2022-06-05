@@ -3,6 +3,8 @@ import Axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { GiHamburgerMenu } from 'react-icons/gi'
+import {  AiFillGift } from 'react-icons/ai'
+
 import { PatchQuestionFill } from '@styled-icons/bootstrap/PatchQuestionFill'
 
 export function Home() {
@@ -41,6 +43,11 @@ export function Home() {
         console.log("err: ", err.response)
       })
   }, [])
+
+  const navigateGifts = () => {
+    navigate("../myGifts", { replace: true });
+
+  }
 
   // const logout = () => {
   //   Axios({
@@ -128,7 +135,9 @@ export function Home() {
   return (
     <main>
       <Header>
-        <GiHamburgerMenu />
+
+        <GiHamburgerMenu  />
+      <AiFillGift onClick={() => navigateGifts()} />
         {!user ? <p onClick={() => navigate("../login", { replace: true })}>Sign in</p> : <>{user}</>}
       </Header>
       <MainWrapper>
