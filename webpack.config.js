@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: ['babel-polyfill', './src/index.js'],
   mode: "development",
   module: {
     rules: [
@@ -10,8 +10,14 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules)/,
         loader: "babel-loader",
-        options: { presets: ["@babel/env"] }
+        options: { 
+          presets: ["@babel/preset-env", '@babel/preset-react'],
+          plugins: [
+            '@babel/transform-runtime'
+        ]
+        }
       },
+      
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
