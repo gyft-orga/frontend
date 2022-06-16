@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+
 export function Login() {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
@@ -37,6 +38,8 @@ export function Login() {
         />
         <input type="submit" />
       </Form>
+
+      <p>Don't have an account? <span onClick={() => navigate( "../register", { replace: true } )}>Sign up</span></p>
     </main>
   );
 }

@@ -53,6 +53,8 @@ export function Register() {
         <input type="submit" />
         {/* <p>{data}</p> */}
       </form>
+      <p>Have an account? <span onClick={() => navigate( "../login", { replace: true } )}>Sign In</span></p>
+
     </main>
   );
 }

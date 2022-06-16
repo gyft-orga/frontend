@@ -1,100 +1,97 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import Axios from 'axios'
+import Axios from "axios";
 import styled from "styled-components";
-
-const fileToDataUri = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        resolve(event.target.result)
-    };
-    reader.readAsDataURL(file);
-})
+import { useNavigate } from "react-router-dom";
 
 export function CreateGift() {
-    const { register, handleSubmit } = useForm();
-    const [imageURL, setImageURL] = useState(null);
-    const [dataUri, setDataUri] = useState('')
-    const [user, setUser] = useState(null)
+  const { register, handleSubmit } = useForm();
+  const [ imageURL, setImageURL ] = useState( null );
+  const [ user, setUser ] = useState( null );
 
-    useEffect(() => {
-        Axios({
-            method: "GET",
-            url: "http://localhost:8002/getuser",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(res => {
-            setUser(res.data.username)
-        })
-            .catch(err => {
-                console.log("err: ", err.response.status)
-            })
-    }, [])
 
-    const onSubmit = (data) => {
-        console.log("user", user)
-        // console.log("data: ", data)
-        // console.log("image url onsubmit: ", imageURL)
-        // console.log("type image url onsubmit: ", typeof imageURL)
+  useEffect( () => {
+    Axios( {
+      method : "GET",
+      url    : "http://localhost:8002/getuser",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    } ).then( res => {
+      setUser( res.data.username );
+    } )
+      .catch( err => {
+        console.log( "err:", err.response.status );
+      } );
+  }, [] );
 
-        axios
-            .post("http://localhost:8002/createGift", { data, imageURL, user }, {
-                headers: { "Content-Type": "application/json" },
-            })
-            .then((response) => {
-                if (response.status === 200)
-                    console.log("success")
-            })
-            .catch((err) => {
-                console.log(err.data);
-            });
-    };
+  const onSubmit = async ( data ) => {
+    const formData = new FormData();
+    formData.append( "image", data.image[0] );
+    await Axios
+      .post( "http://localhost:8002/uploadImage", formData, {
+      } )
+      .then( ( response ) => {
+        console.log( "response from uploadImage", response );
+      } )
+      .catch( ( err ) => {
+        console.log( err.data );
+      } );
 
-    const handleChange = (event) => {
-        const objectURL = URL.createObjectURL(event.target.files[0])
-        const file = event.target.files[0]
+    Axios
+      .post( "http://localhost:8002/createGift", data, {
+      } )
+      .then( ( response ) => {
+        console.log( "response", response );
+      } )
+      .catch( ( err ) => {
+        console.log( err.data );
+      } );
+  };
 
-        setImageURL(objectURL)
-
-        fileToDataUri(file)
-            .then(dataUri => {
-                //   setDataUri(dataUri)
-                console.log("dataUri", dataUri)
-            })
-    }
-
-    const GiftPreview = styled.img`
+  const GiftPreview = styled.img`
         width: 80%;
         height: 80%;
-`
+`;
 
-    return (
-        <main>
-            <h2>Create Gift</h2>
-            <form onSubmit={handleSubmit((data) => onSubmit(data))}>
-                <div>
-                    <input {...register("title")} placeholder="Title" type="text" />
-                </div>
-                <div>
-                    <input
-                        {...register("description")}
-                        placeholder="Description"
-                        type="text"
-                    />
-                </div>
-                <div>
-                    <input
-                        {...register("url")}
-                        placeholder="Url"
-                        type="url"
-                    />
-                </div>
-                <div>
-                    <label for="img">Select image:</label>
-                    <input {...register("image")} type="file" id="img" name="img" accept="image/*" onChange={(e) => handleChange(e)} />
-                    {/* <input
+  return (
+    <main>
+
+      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+
+      <h2>Create Gift</h2>
+
+      <form onSubmit={handleSubmit( ( data ) => onSubmit( data ) )}>
+
+        <div>
+          <input {...register( "title" )} placeholder="Title" type="text" required />
+        </div>
+        <div>
+          <input
+            {...register( "description" )}
+            placeholder="Description"
+            type="text"
+          />
+        </div>
+        <div>
+          <input
+            {...register( "url" )}
+            placeholder="Url"
+            type="url"
+          />
+        </div>
+        <div>
+          <label for="img">Select image:</label>
+          <div >
+            <input
+            // ref={register}
+              {...register( "image" )}
+              type="file"
+              name="image"
+            />
+          </div>
+          {/* <input {...register("image")} type="file" id="img" name="image" accept="image/*" onChange={(e) => handleChange(e)} /> */}
+          {/* <input
                         {...register("image")}
                         type="file"
                         id="img"
@@ -104,20 +101,19 @@ export function CreateGift() {
                         onChange={(e) => setSelectedFile(e.target.files[0])}
                     /> */}
 
-                </div>
-                <GiftPreview src={imageURL} />
-
-                <div>
-                    <select {...register("priority")} name="priority" id="priority" multiple>
-                        <option value={1}>Must Have</option>
-                        <option value={2}>I'd like</option>
-                        <option value={3}>Maybe</option>
-                    </select>
-                </div>
-                <div>
-                </div>
-                <input type="submit" />
-            </form>
-        </main>
-    );
+        </div>
+        <GiftPreview src={imageURL} />
+        <div>
+          <select {...register( "priority" )} name="priority" id="priority" multiple>
+            <option value={1}>Must Have</option>
+            <option value={2}>I'd like</option>
+            <option value={3}>Maybe</option>
+          </select>
+        </div>
+        <div>
+        </div>
+        <input type="submit" />
+      </form>
+    </main>
+  );
 }
