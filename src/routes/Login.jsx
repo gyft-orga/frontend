@@ -39,7 +39,7 @@ export function Login() {
         <input type="submit" />
       </Form>
 
-  <p>Don't have an account? <span onClick={() => navigate( "../register", { replace: true } )}>Sign up</span></p>
+      <p>Don't have an account? <span onClick={() => navigate( "../register", { replace: true } )}>Sign up</span></p>
     </main>
   );
 }
