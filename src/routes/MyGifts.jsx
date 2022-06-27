@@ -3,15 +3,9 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { GiHamburgerMenu } from "react-icons/gi";
-import { AiFillGift } from "react-icons/ai";
-import { PatchQuestionFill } from "@styled-icons/bootstrap/PatchQuestionFill";
-
 export function MyGifts() {
   const navigate = useNavigate();
-  const [ user, setUser ] = useState( null );
   const [ giftData, setGiftData ] = useState( null );
-
 
   const GiftPreview = styled.img`
   width: 80%;
@@ -21,7 +15,7 @@ export function MyGifts() {
   useEffect( () => {
     Axios( {
       method : "GET",
-      url    : "http://localhost:8002/myGifts",
+      url    : "http://localhost:8002/my-gifts",
       headers: {
         "Content-Type": "application/json",
       },
