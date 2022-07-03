@@ -7,53 +7,53 @@ import { useNavigate } from "react-router-dom";
 export function CreateGift() {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
-  const [imageURL, setImageURL] = useState(null);
-  const [user, setUser] = useState(null);
+  const [ imageURL, setImageURL ] = useState( null );
+  const [ user, setUser ] = useState( null );
 
-  useEffect(() => {
-    Axios({
-      method: "GET",
-      url: "http://localhost:8002/getuser",
+  useEffect( () => {
+    Axios( {
+      method : "GET",
+      url    : "http://localhost:8002/getuser",
       headers: {
         "Content-Type": "application/json",
       },
-    }).then(res => {
-      if (res.data)
-        setUser(res.data.username);
-    })
-      .catch(err => {
-        if (err.response.status = 401) {
-          navigate("../login", { replace: true });
-        }
-      });
-  }, []);
+    } ).then( res => {
+      if ( res.data )
+        setUser( res.data.username );
+    } )
+      .catch( err => {
+        if ( err.response.status === 401 )
+          navigate( "../login", { replace: true } );
 
-  const onSubmit = async (data) => {
+      } );
+  }, [] );
+
+  const onSubmit = async ( data ) => {
     const formData = new FormData();
-    formData.append("image", data.image[0]);
+    formData.append( "image", data.image[0] );
     await Axios
-      .post("http://localhost:8002/uploadImage", formData, {
-      })
-      .then((response) => {
+      .post( "http://localhost:8002/uploadImage", formData, {
+      } )
+      .then( ( response ) => {
         // console.log("response from uploadImage");
-      })
-      .catch((err) => {
-        console.log(err.data);
-      });
+      } )
+      .catch( ( err ) => {
+        console.log( err.data );
+      } );
 
     Axios
-      .post("http://localhost:8002/gifts", data, {
-      })
-      .then((response) => {
-        console.log("response", response.data.message);
-        if (response.data.message === "success") {
-          navigate("../myGifts", { replace: true });
+      .post( "http://localhost:8002/gifts", data, {
+      } )
+      .then( ( response ) => {
+        console.log( "response", response );
+        if ( response.data.message === "success" )
+          navigate( "../myGifts", { replace: true } );
 
-        }
-      })
-      .catch((err) => {
-        console.log(err.data);
-      });
+
+      } )
+      .catch( ( err ) => {
+        console.log( err.data );
+      } );
   };
 
   const GiftPreview = styled.img`
@@ -68,21 +68,21 @@ export function CreateGift() {
 
       <h2>Create Gift</h2>
 
-      <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+      <form onSubmit={handleSubmit( ( data ) => onSubmit( data ) )}>
 
         <div>
-          <input {...register("title")} placeholder="Title" type="text" />
+          <input {...register( "title" )} placeholder="Title" type="text" />
         </div>
         <div>
           <input
-            {...register("description")}
+            {...register( "description" )}
             placeholder="Description"
             type="text"
           />
         </div>
         <div>
           <input
-            {...register("url")}
+            {...register( "url" )}
             placeholder="Url"
             type="url"
           />
@@ -92,7 +92,7 @@ export function CreateGift() {
           <div >
             <input
               // ref={register}
-              {...register("image")}
+              {...register( "image" )}
               type="file"
               name="image"
             />
@@ -111,7 +111,7 @@ export function CreateGift() {
         </div>
         <GiftPreview src={imageURL} />
         <div>
-          <select {...register("priority")} name="priority" id="priority" multiple>
+          <select {...register( "priority" )} name="priority" id="priority" multiple>
             <option value={1}>Must Have</option>
             <option value={2}>I'd like</option>
             <option value={3}>Maybe</option>
