@@ -49,9 +49,7 @@ export function Home() {
   }, [] );
 
   const navigateGifts = () => {
-
-    navigate( "../myGifts", { replace: true } );
-
+    navigate( `../gift-profile/${user}`, { replace: true } );
   };
 
   const changeMode = () => {
@@ -63,12 +61,22 @@ export function Home() {
     setShowMenu( !showMenu );
   };
 
-
-  const searchUser = ( data ) => {
-    console.log( "search this user -->", data );
-  };
   const onSubmit = async ( data ) => {
-    console.log( "data", data );
+    Axios( {
+      method : "GET",
+      url    : `http://localhost:8002/checkUser/username/${data.userTarget}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    } ).then( res => {
+      console.log( "res", res );
+      if ( res.data === "success" )
+        navigate( `../username/${data.userTarget}` );
+
+    } )
+      .catch( err => {
+        console.log( "err:", err.response.status );
+      } );
   };
 
   const Header = styled.div`

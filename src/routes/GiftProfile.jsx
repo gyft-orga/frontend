@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment";
 
-export function MyGifts() {
+export function GiftProfile() {
+  const { username } = useParams();
   const navigate = useNavigate();
   const [ giftData, setGiftData ] = useState( null );
+  const [ loggedUser, setLoggedUser ] = useState( null );
+  const [ userParam, setUserParam ] = useState( null );
 
   const GiftPreview = styled.img`
   width: 80%;
@@ -16,11 +19,29 @@ export function MyGifts() {
   useEffect( () => {
     Axios( {
       method : "GET",
-      url    : "http://localhost:8002/my-gifts",
+      url    : "http://localhost:8002/getuser",
       headers: {
         "Content-Type": "application/json",
       },
     } ).then( res => {
+      setLoggedUser( res.data.username );
+    } )
+      .catch( err => {
+        console.log( "err:", err.response.status );
+        navigate( "../login", { replace: true } );
+      } );
+  }, [] );
+
+  useEffect( () => {
+    setUserParam( username );
+    Axios( {
+      method : "GET",
+      url    : `http://localhost:8002/gift-profile/${username}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    } ).then( res => {
+
       setGiftData( res.data );
     } )
       .catch( err => {
@@ -40,6 +61,7 @@ export function MyGifts() {
   return (
     <main>
       <h1>My Gifts</h1>
+      {loggedUser === userParam && <p>These are your own gifts!</p>}
       <p onClick={() => navigate( "../createGift", { replace: true } )}>Add a Gift</p>
       {giftData && giftData.map( gift => {
         return (
@@ -48,7 +70,6 @@ export function MyGifts() {
             <h2>{gift.title}</h2>
             <p>{gift.description}</p>
             <p>{gift.priority}</p>
-
             {priorityCondition( gift.priority )}
             <img src={gift.imageURL} />
             {/* <GiftPreview src={gift.imageURL} /> */}
