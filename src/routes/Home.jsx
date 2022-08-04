@@ -3,49 +3,49 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { GiHamburgerMenu } from "react-icons/gi";
-import {  AiFillGift } from "react-icons/ai";
+import { AiFillGift } from "react-icons/ai";
 
 import { PatchQuestionFill } from "@styled-icons/bootstrap/PatchQuestionFill";
 
 export function Home() {
   const navigate = useNavigate();
-  const [ user, setUser ] = useState( null );
-  const [ flag, setFlag ] = useState( "username" );
-  const [ giftData, setGiftData ] = useState( null );
+  const [user, setUser] = useState(null);
+  const [flag, setFlag] = useState("username");
+  const [giftData, setGiftData] = useState(null);
 
-  useEffect( () => {
-    Axios( {
-      method : "GET",
-      url    : "http://localhost:8002/getuser",
+  useEffect(() => {
+    Axios({
+      method: "GET",
+      url: "http://localhost:8002/getuser",
       headers: {
         "Content-Type": "application/json",
       },
-    } ).then( res => {
-      setUser( res.data.username );
-    } )
-      .catch( err => {
-        console.log( "err:", err.response.status );
-        navigate( "../login", { replace: true } );
-      } );
-  }, [] );
+    }).then(res => {
+      setUser(res.data.username);
+    })
+      .catch(err => {
+        console.log("err:", err.response.status);
+        navigate("../login", { replace: true });
+      });
+  }, []);
 
-  useEffect( () => {
-    Axios( {
-      method : "GET",
-      url    : "http://localhost:8002/home",
+  useEffect(() => {
+    Axios({
+      method: "GET",
+      url: "http://localhost:8002/home",
       headers: {
         "Content-Type": "application/json",
       },
-    } ).then( res => {
-      setGiftData( res.data );
-    } )
-      .catch( err => {
-        console.log( "err:", err.response );
-      } );
-  }, [] );
+    }).then(res => {
+      setGiftData(res.data);
+    })
+      .catch(err => {
+        console.log("err:", err.response);
+      });
+  }, []);
 
   const navigateGifts = () => {
-    navigate( "../myGifts", { replace: true } );
+    navigate("../myGifts", { replace: true });
 
   };
 
@@ -63,7 +63,7 @@ export function Home() {
   // }
 
   const changeMode = () => {
-    setFlag( flag === "phone" ? "username" : "phone" );
+    setFlag(flag === "phone" ? "username" : "phone");
   };
 
   const Header = styled.div`
@@ -86,7 +86,7 @@ export function Home() {
   margin: 0;
   `;
 
-  const QuestionIcon = styled( PatchQuestionFill )`
+  const QuestionIcon = styled(PatchQuestionFill)`
   color: black;
   height: 50px;
   width: 50px;
@@ -111,9 +111,9 @@ export function Home() {
   font-size: 14px;
 `;
 
-  const InputButton = styled.input.attrs( {
+  const InputButton = styled.input.attrs({
     type: "button",
-  } )`
+  })`
   background: #00aec9;
   color: #fff;
   cursor: pointer;
@@ -135,9 +135,11 @@ export function Home() {
   return (
     <main>
       <Header>
-        <GiHamburgerMenu  />
+        <GiHamburgerMenu />
         <AiFillGift onClick={() => navigateGifts()} />
-        {!user ? <p onClick={() => navigate( "../login", { replace: true } )}>Sign in</p> : <>{user}</>}
+        {!user ?
+          <p onClick={() => navigate("../login")}>Sign in</p>
+          : <p onClick={() => navigate("../profile")}>{user}</p>}
       </Header>
       <MainWrapper>
         <Text>Search for your friends {flag === "phone" ? "phone number" : "username"}!</Text>
@@ -149,7 +151,7 @@ export function Home() {
           update your gift preferences and more!</p>}
         <GiftTextTitle>Gifts claimed for you</GiftTextTitle>
 
-        {user && giftData && giftData.filter( gift => gift.owner === user ).map( ( gift, i ) => {
+        {user && giftData && giftData.filter(gift => gift.owner === user).map((gift, i) => {
           return (
             <>
               <SmallText>{gift.title}</SmallText>
@@ -160,10 +162,10 @@ export function Home() {
               </FlexWrapper>
             </>
           );
-        } )}
+        })}
         <GiftTextTitle>Gifts you've claimed</GiftTextTitle>
 
-        {user && giftData && giftData.filter( gift => gift.claimed_by === user ).map( ( gift, i ) => {
+        {user && giftData && giftData.filter(gift => gift.claimed_by === user).map((gift, i) => {
           return (
             <>
               <SmallText>{gift.title}</SmallText>
@@ -174,7 +176,7 @@ export function Home() {
               </FlexWrapper>
             </>
           );
-        } )}
+        })}
         {user && <>
           <FlexWrapper>
             <QuestionIcon />

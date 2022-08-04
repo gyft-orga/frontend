@@ -5,5 +5,6 @@ export * from "./Home";
 export * from "./CreateGift";
 export * from "./MyGifts";
 export * from "./Upload";
+export * from "./Profile";
 
 
