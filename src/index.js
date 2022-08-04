@@ -13,7 +13,7 @@ render(
       <Route exact path="register" element={<Register />} />
       <Route exact path="secret" element={<Secret />} />
       <Route exact path="createGift" element={<CreateGift />} />
-      <Route exact path="gift-profile/:username" element={<GiftProfile />} />
+      <Route exact path="giftProfile/:username" element={<GiftProfile />} />
       <Route exact path="upload" element={<Upload />} />
       <Route exact path="profile" element={<Profile />} />
       <Route exact path="/" element={<App />} />

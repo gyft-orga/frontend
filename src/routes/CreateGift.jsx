@@ -42,12 +42,12 @@ export function CreateGift() {
       } );
 
     Axios
-      .post( "http://localhost:8002/gifts", data, {
+      .post( "http://localhost:8002/createGift", data, {
       } )
       .then( ( response ) => {
         console.log( "response", response );
         if ( response.data.message === "success" )
-          navigate( "../myGifts", { replace: true } );
+          navigate( `../giftProfile/${user}`, { replace: true } );
 
 
       } )

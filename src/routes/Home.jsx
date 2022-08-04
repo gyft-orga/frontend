@@ -49,7 +49,7 @@ export function Home() {
   }, []);
 
   const navigateGifts = () => {
-    navigate( `../gift-profile/${user}`, { replace: true } );
+    navigate( `../giftProfile/${user}`, { replace: true } );
   };
 
   const changeMode = () => {
@@ -59,7 +59,7 @@ export function Home() {
   const changeMenu = () => {
     console.log( "open menu" );
     setShowMenu( !showMenu );
-  };
+  };  
 
   const onSubmit = async ( data ) => {
     Axios( {
@@ -71,7 +71,7 @@ export function Home() {
     } ).then( res => {
       console.log( "res", res );
       if ( res.data === "success" )
-        navigate( `../username/${data.userTarget}` );
+        navigate( `../giftProfile/${data.userTarget}` );
 
     } )
       .catch( err => {
