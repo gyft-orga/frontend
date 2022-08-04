@@ -41,13 +41,57 @@ export function GiftProfile() {
         "Content-Type": "application/json",
       },
     }).then(res => {
-      console.log("res.data", res.data)
       setGiftData(res.data);
     })
       .catch(err => {
         console.log("err:", err.response);
       });
   }, []);
+
+
+  function claimGift(id) {
+    Axios({
+      method: "PUT",
+      url: `http://localhost:8002/claimGift/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(res => {
+      console.log("res.data", res.data)
+      const newGiftData = [...giftData]
+      newGiftData.map((gift, index) => {
+        if (gift._id === id) {
+          newGiftData[index] = res.data
+        }
+      })
+      setGiftData(newGiftData);
+    })
+      .catch(err => {
+        console.log("err:", err.response);
+      });
+  }
+
+  function unclaimGift(id) {
+    Axios({
+      method: "PUT",
+      url: `http://localhost:8002/unclaimGift/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(res => {
+      console.log("res.data", res.data)
+      const newGiftData = [...giftData]
+      newGiftData.map((gift, index) => {
+        if (gift._id === id) {
+          newGiftData[index] = res.data
+        }
+      })
+      setGiftData(newGiftData);
+    })
+      .catch(err => {
+        console.log("err:", err.response);
+      });
+  }
 
   function priorityCondition(priority) {
     if (priority === "1")
@@ -58,8 +102,42 @@ export function GiftProfile() {
       return <p>Maybe</p>;
   }
 
+  function claimCondition(claimedBy, _id) {
+    console.log("claimedBy", claimedBy)
+    console.log("_id", _id)
+
+    if (claimedBy === 'undefined') {
+      return
+    }
+    else if (loggedUser !== userParam && claimedBy === loggedUser) {
+      console.log("case for: UNCLAIM THIS GIFT")
+      return (
+        <>
+          <button onClick={() => unclaimGift(_id)}>UNCLAIM THIS GIFT</button>
+        </>
+
+      )
+    }
+    else if (loggedUser !== userParam && claimedBy === null) {
+      console.log("case for: CLAIM THIS GIFT")
+      return (
+        <>
+          <button onClick={() => claimGift(_id)}>CLAIM THIS GIFT</button>
+        </>
+
+      )
+    }
+    else if (loggedUser !== userParam && claimedBy !== null && claimedBy !== loggedUser) {
+      return (
+        <p>This gift has been claimed by someone else</p>
+      )
+    }
+  }
+
   return (
     <main>
+      <p onClick={() => navigate("../home")}>BACK</p>
+
       {loggedUser === userParam ? <h1>My Gifts</h1> : <h1>Gifts of {userParam}</h1>}
       {loggedUser === userParam && <p>These are your own gifts!</p>}
       {loggedUser === userParam && <p onClick={() => navigate("../createGift", { replace: true })}>Add a Gift</p>}
@@ -73,8 +151,10 @@ export function GiftProfile() {
             {priorityCondition(gift.priority)}
             <img src={gift.imageURL} />
             {/* <GiftPreview src={gift.imageURL} /> */}
-            <h3>{gift.claimed_by}</h3>
+            <h3>{gift.claimedBy}</h3>
             <p>{moment(gift.updatedAt).fromNow()}</p>
+            {console.log("gift", gift)}
+            {claimCondition(gift.claimedBy, gift._id)}
           </>
         );
       })}
