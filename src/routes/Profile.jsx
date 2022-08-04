@@ -1,56 +1,50 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-Axios.defaults.withCredentials = true;
 
 export function Profile() {
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
+  const [ user, setUser ] = useState( null );
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        Axios({
-            method: "GET",
-            url: "http://localhost:8002/getuser",
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
-            },
-            withCredentials: true,
-        })
-            .then((res) => {
-                setUser(res.data.username);
 
-            })
-            .catch((err) => {
-                navigate("../login", { replace: true });
-            });
-    }, []);
+  useEffect( () => {
+    Axios( {
+      method : "GET",
+      url    : "http://localhost:8002/getuser",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    } ).then( res => {
+      setUser( res.data.username );
+    } )
+      .catch( err => {
+        console.log( "err:", err.response.status );
+        navigate( "../login", { replace: true } );
+      } );
+  }, [] );
 
-    const logout = () => {
-        Axios({
-            method: "GET",
-            url: "http://localhost:8002/auth/logout",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then((res) => {
-            console.log("res", res);
-            navigate("../login", { replace: true });
-        });
-    };
+  const logout = () => {
+    Axios({
+        method: "GET",
+        url: "http://localhost:8002/auth/logout",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((res) => {
+        console.log("res", res);
+        navigate("../login", { replace: true });
+    });
+};
 
-    return (
-        <main>
-            {user ?
-                <>
-                    <h2>My Profile</h2>
-                    <p>You are user: {user} </p>
-                    <p>If you are here it is because you are logged in</p>
-                    <input type="button" value="LOG OUT" onClick={() => logout()} />
-                </>
-                :
-                <p>you can't see this secret cuz u are not logged in</p>
-            }
-        </main>
-    );
+  return (
+    <main>
+      <>
+        <h2>My Profile </h2>
+        <p>You are user {user}</p>
+        <input type="button" value="LOG OUT" onClick={() => logout()} />
+
+      </>
+      <p></p>
+    </main>
+  );
 }
