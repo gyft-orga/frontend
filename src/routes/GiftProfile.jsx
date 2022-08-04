@@ -137,7 +137,6 @@ export function GiftProfile() {
   return (
     <main>
       <p onClick={() => navigate("../home")}>BACK</p>
-
       {loggedUser === userParam ? <h1>My Gifts</h1> : <h1>Gifts of {userParam}</h1>}
       {loggedUser === userParam && <p>These are your own gifts!</p>}
       {loggedUser === userParam && <p onClick={() => navigate("../createGift", { replace: true })}>Add a Gift</p>}
@@ -155,6 +154,11 @@ export function GiftProfile() {
             <p>{moment(gift.updatedAt).fromNow()}</p>
             {console.log("gift", gift)}
             {claimCondition(gift.claimedBy, gift._id)}
+            {loggedUser !== userParam && 
+            <button 
+            onClick={gift.claimedBy === loggedUser ? () => unclaimGift(gift._id): () => claimGift(gift._id) }>
+              {gift.claimedBy === loggedUser ? "Unclaim this gift" : "Claim this gift"}
+              </button>}
           </>
         );
       })}
