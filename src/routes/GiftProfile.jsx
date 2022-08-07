@@ -79,7 +79,6 @@ export function GiftProfile() {
         "Content-Type": "application/json",
       },
     }).then(res => {
-      console.log("res.data", res.data)
       const newGiftData = [...giftData]
       newGiftData.map((gift, index) => {
         if (gift._id === id) {
@@ -103,14 +102,10 @@ export function GiftProfile() {
   }
 
   function claimCondition(claimedBy, _id) {
-    console.log("claimedBy", claimedBy)
-    console.log("_id", _id)
-
     if (claimedBy === 'undefined') {
       return
     }
     else if (loggedUser !== userParam && claimedBy === loggedUser) {
-      console.log("case for: UNCLAIM THIS GIFT")
       return (
         <>
           <button onClick={() => unclaimGift(_id)}>UNCLAIM THIS GIFT</button>
@@ -119,7 +114,6 @@ export function GiftProfile() {
       )
     }
     else if (loggedUser !== userParam && claimedBy === null) {
-      console.log("case for: CLAIM THIS GIFT")
       return (
         <>
           <button onClick={() => claimGift(_id)}>CLAIM THIS GIFT</button>
@@ -152,13 +146,12 @@ export function GiftProfile() {
             {/* <GiftPreview src={gift.imageURL} /> */}
             <h3>{gift.claimedBy}</h3>
             <p>{moment(gift.updatedAt).fromNow()}</p>
-            {console.log("gift", gift)}
             {claimCondition(gift.claimedBy, gift._id)}
-            {loggedUser !== userParam && 
+            {/* {loggedUser !== userParam && 
             <button 
             onClick={gift.claimedBy === loggedUser ? () => unclaimGift(gift._id): () => claimGift(gift._id) }>
               {gift.claimedBy === loggedUser ? "Unclaim this gift" : "Claim this gift"}
-              </button>}
+              </button>} */}
           </>
         );
       })}

@@ -11,16 +11,16 @@ import { useForm } from "react-hook-form";
 
 export function Home() {
   const navigate = useNavigate();
-  const [ user, setUser ] = useState( null );
-  const [ flag, setFlag ] = useState( "username" );
-  const [ giftData, setGiftData ] = useState( null );
-  const [ showMenu, setShowMenu ] = useState( false );
+  const [user, setUser] = useState(null);
+  const [flag, setFlag] = useState("username");
+  const [giftData, setGiftData] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
   const { register, handleSubmit } = useForm();
 
-  useEffect( () => {
-    Axios( {
-      method : "GET",
-      url    : "http://localhost:8002/getuser",
+  useEffect(() => {
+    Axios({
+      method: "GET",
+      url: "http://localhost:8002/getuser",
       headers: {
         "Content-Type": "application/json",
       },
@@ -49,7 +49,7 @@ export function Home() {
   }, []);
 
   const navigateGifts = () => {
-    navigate( `../giftProfile/${user}`, { replace: true } );
+    navigate(`../giftProfile/${user}`, { replace: true });
   };
 
   const changeMode = () => {
@@ -57,26 +57,26 @@ export function Home() {
   };
 
   const changeMenu = () => {
-    console.log( "open menu" );
-    setShowMenu( !showMenu );
-  };  
+    console.log("open menu");
+    setShowMenu(!showMenu);
+  };
 
-  const onSubmit = async ( data ) => {
-    Axios( {
-      method : "GET",
-      url    : `http://localhost:8002/checkUser/username/${data.userTarget}`,
+  const onSubmit = async (data) => {
+    Axios({
+      method: "GET",
+      url: `http://localhost:8002/checkUser/username/${data.userTarget}`,
       headers: {
         "Content-Type": "application/json",
       },
-    } ).then( res => {
-      console.log( "res", res );
-      if ( res.data === "success" )
-        navigate( `../giftProfile/${data.userTarget}` );
+    }).then(res => {
+      console.log("res", res);
+      if (res.data === "success")
+        navigate(`../giftProfile/${data.userTarget}`);
 
-    } )
-      .catch( err => {
-        console.log( "err:", err.response.status );
-      } );
+    })
+      .catch(err => {
+        console.log("err:", err.response.status);
+      });
   };
 
   const Header = styled.div`
@@ -148,7 +148,7 @@ export function Home() {
   display: flex;
 `;
 
-  const InputButton = styled.input.attrs( {
+  const InputButton = styled.input.attrs({
     type: "button",
   })`
   background: #00aec9;
@@ -178,14 +178,14 @@ export function Home() {
           <GiHamburgerMenu />
         </div>
         <AiFillGift onClick={() => navigateGifts()} />
-        {!user ? <p onClick={() => navigate( "../login", { replace: true } )}>Sign in</p> : <p onClick={() => navigate( "../profile", { replace: true } )}>{user}</p>}
+        {!user ? <p onClick={() => navigate("../login", { replace: true })}>Sign in</p> : <p onClick={() => navigate("../profile", { replace: true })}>{user}</p>}
       </Header>
       {showMenu && <MenuContainer><Menu changeMenu={changeMenu} /></MenuContainer>}
       <MainWrapper>
         <Text>Search for your friends {flag === "phone" ? "phone number" : "username"}!</Text>
-        <form onSubmit={handleSubmit( ( data ) => onSubmit( data ) )}>
+        <form onSubmit={handleSubmit((data) => onSubmit(data))}>
           <FlexWrapper>
-            <Input {...register( "userTarget" )} placeholder={flag === "phone" ? "phone number" : "username"} />
+            <Input {...register("userTarget")} placeholder={flag === "phone" ? "phone number" : "username"} />
             {/* <ArrowIcon onClick={() => onSubmit()}> */}
             <button type="submit" >
               <BsArrowRightSquareFill size={35} />
@@ -198,10 +198,10 @@ export function Home() {
         </div>
         {!user && <p>Sign in to see your gift claim history,
           update your gift preferences and more!</p>}
-        {giftData && giftData.filter( gift => gift.claimedBy !== null ).length !== 0
+        {giftData && giftData.filter(gift => gift.claimedBy !== null).length !== 0
           ? <GiftTextTitle>Gifts claimed for you</GiftTextTitle>
-          : <GiftTextTitle onClick={() => navigate( "../myGifts", { replace: true } )}>None of your gifts have been claimed. Consider sharing your wishlist with family and friends.</GiftTextTitle>}
-        {user && giftData && giftData.filter( gift => gift.claimedBy !== null ).map( ( gift, i ) => {
+          : <GiftTextTitle onClick={() => navigate("../myGifts", { replace: true })}>None of your gifts have been claimed. Consider sharing your wishlist with family and friends.</GiftTextTitle>}
+        {user && giftData && giftData.filter(gift => gift.claimedBy !== null && gift.owner === user).map((gift, i) => {
           return (
             <>
               <SmallText>{gift.title}</SmallText>
@@ -212,12 +212,12 @@ export function Home() {
               </FlexWrapper>
             </>
           );
-        } )}
-        {giftData && giftData.filter( gift => gift.claimedBy === user ).length !== 0
+        })}
+        {giftData && giftData.filter(gift => gift.claimedBy === user).length !== 0
           ? <GiftTextTitle>Gifts you've claimed</GiftTextTitle>
           : <GiftTextTitle>You have claimed no gifts</GiftTextTitle>}
 
-        {user && giftData && giftData.filter( gift => gift.claimedBy === user ).map( ( gift, i ) => {
+        {user && giftData && giftData.filter(gift => gift.claimedBy === user).map((gift, i) => {
           return (
             <>
               <SmallText>{gift.title}</SmallText>
@@ -228,7 +228,7 @@ export function Home() {
               </FlexWrapper>
             </>
           );
-        } )}
+        })}
         {/* {user && <>
           <FlexWrapper>
             
