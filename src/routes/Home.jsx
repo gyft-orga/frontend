@@ -120,6 +120,7 @@ export function Home() {
   left: 0;
   top: 0;
   position: absolute;
+  z-index: 1;
 `;
 
   const SmallText = styled.p`
