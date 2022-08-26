@@ -113,7 +113,7 @@ export function Home() {
   `;
 
   const MenuContainer = styled.div`
-  width: 90%;
+  width: 100%;
   height: 100%;
   background-color: #F0EBE3;
   margin: 0;

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { IoMdClose } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 export function Menu({ changeMenu }) {
-
-
- 
+  const navigate = useNavigate();
 
   const CloseIconWrapper = styled.div`
     justify-content: right;
@@ -16,15 +15,21 @@ export function Menu({ changeMenu }) {
     margin-left: 20px;
   `;
 
+  const MenuOption = styled.p`
+  width: min-content;
+`;
+
   return (
     <>
-      <CloseIconWrapper onClick={() => changeMenu()}> <IoMdClose /></CloseIconWrapper>
+      <CloseIconWrapper >
+        <IoMdClose onClick={() => changeMenu()} />
+      </CloseIconWrapper>
       <OptionsWrapper>
-        <p>Settings</p>
-        <p>Privacy Policy</p>
-        <p>About</p>
-        <p>Donate</p>
-      </OptionsWrapper>
+        <MenuOption onClick={() => navigate(`../menu/settings`)}>Settings</MenuOption>
+        <MenuOption onClick={() => navigate("../menu/policy")}>Privacy Policy</MenuOption>
+        <MenuOption onClick={() => navigate("../menu/about")}>About</MenuOption>
+        <MenuOption onClick={() => navigate("../menu/donate")}>Donate</MenuOption>
+      </ OptionsWrapper>
     </>
   );
 }
