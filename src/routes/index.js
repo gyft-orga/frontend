@@ -6,7 +6,3 @@ export * from "./CreateGift";
 export * from "./GiftProfile";
 export * from "./Upload";
 export * from "./Profile";
-
-
-
-

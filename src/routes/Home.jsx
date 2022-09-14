@@ -15,6 +15,7 @@ export function Home() {
   const [flag, setFlag] = useState("username");
   const [giftData, setGiftData] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [received, setReceived] = useState(false);
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
@@ -61,7 +62,54 @@ export function Home() {
     setShowMenu(!showMenu);
   };
 
+  const receiveGift = (id) => {
+    console.log("receive gift");
+    Axios({
+      method: "PUT",
+      url: `http://localhost:8002/receiveGift/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(res => {
+      console.log("res.data", res.data)
+      const newGiftData = [...giftData]
+      newGiftData.map((gift, index) => {
+        if (gift._id === id) {
+          newGiftData[index] = res.data
+        }
+      })
+      setGiftData(newGiftData);
+    })
+      .catch(err => {
+        console.log("err:", err.response);
+      });
+  };
+
+  const unreceiveGift = (id) => {
+    console.log("receive gift");
+    Axios({
+      method: "PUT",
+      url: `http://localhost:8002/unreceiveGift/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(res => {
+      console.log("res.data", res.data)
+      const newGiftData = [...giftData]
+      newGiftData.map((gift, index) => {
+        if (gift._id === id) {
+          newGiftData[index] = res.data
+        }
+      })
+      setGiftData(newGiftData);
+    })
+      .catch(err => {
+        console.log("err:", err.response);
+      });
+  };
+
   const onSubmit = async (data) => {
+    console.log("search user!!!")
     Axios({
       method: "GET",
       url: `http://localhost:8002/checkUser/username/${data.userTarget}`,
@@ -70,9 +118,11 @@ export function Home() {
       },
     }).then(res => {
       console.log("res", res);
-      if (res.data === "success")
+      if (res.data === "success") {
         navigate(`../giftProfile/${data.userTarget}`);
+      } else if (res.data === "No results") {
 
+      }
     })
       .catch(err => {
         console.log("err:", err.response.status);
@@ -142,6 +192,12 @@ export function Home() {
   font-size: 14px;
 `;
 
+const ItalicText = styled.p`
+font-size: 14px;
+font-style: italic;
+
+`;
+
   const ArrowIcon = styled.div`
   position: absolute;
   right: 3%;
@@ -169,8 +225,6 @@ export function Home() {
     background-color: #f1ac15;
   }
 `;
-
-
 
   return (
     <main>
@@ -208,8 +262,7 @@ export function Home() {
               <SmallText>{gift.title}</SmallText>
               <Text>{gift.description}</Text>
               <FlexWrapper>
-                <InputButton value="Received" />
-                <InputButton value="Not Received" />
+                <InputButton onClick={() => !gift.received ? receiveGift(gift._id) : unreceiveGift(gift._id)} value={!gift.received ? "Received" : "Not Received"} />
               </FlexWrapper>
             </>
           );
@@ -223,21 +276,10 @@ export function Home() {
             <>
               <SmallText>{gift.title}</SmallText>
               <Text>{gift.description}</Text>
-              <FlexWrapper>
-                <InputButton value="Received" />
-                <InputButton value="Not Received" />
-              </FlexWrapper>
+              <ItalicText>Waiting for confirmation of receipt from {gift.owner}</ItalicText>
             </>
           );
         })}
-        {/* {user && <>
-          <FlexWrapper>
-            
-            <Text><QuestionIcon />If, after 30 days, a claimed gift is not received, it can be
-              marked as unfulfilled. After 2 unfulfilled gifts, one may get
-              a suspension.</Text>
-          </FlexWrapper>
-        </>} */}
       </MainWrapper>
     </main>
   );
